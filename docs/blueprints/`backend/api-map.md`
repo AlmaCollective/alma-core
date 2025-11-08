@@ -1,0 +1,54 @@
+
+```markdown
+# Alma Core API Map
+
+High-level overview of backend endpoints for Alma's emotional data flow.  
+Stack: Node.js + Express + Prisma + AI SDK (as per Saurabh's tech stack).
+
+## 1. Emotion Ingestion
+
+`POST /api/emotion/layered`
+
+- Accepts one `emotion-layer` JSON object.
+- Validates against `models/emotion-layer.json`.
+- Stores record in `emotion_layers` collection/table.
+- Triggers coherence and complex-weight update.
+
+Response:
+
+```json
+{
+  "status": "ok",
+  "coherence_score": 0.72,
+  "complex_weight": 0.63,
+  "cycle_state": "in_progress"
+}
+2. Coherence Cycles
+GET /api/coherence/cycles?user_id=...&range=7d
+
+Returns aggregated coherence cycles for the given period.
+
+Used for visualizations and trend analysis.
+
+3. Complex Overview
+GET /api/complex/summary?user_id=...
+
+Returns top recurring complexes:
+
+complex_tag
+
+weight
+
+recurrence_count_7d
+
+average_duration_sec
+
+4. Health Check
+GET /api/health
+
+Simple status endpoint for monitoring.
+
+Returns { "status": "up" }.
+
+This map is a starting point for implementation.
+As Alma evolves, new endpoints (e.g., suggestions, grounding exercises, reports) will be added here.
