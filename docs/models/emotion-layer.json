@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Alma Emotion Layer Model",
+  "type": "object",
+  "properties": {
+    "user_id": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+
+    "body": {
+      "type": "object",
+      "properties": {
+        "hr": { "type": "number" },
+        "hrv": { "type": "number" },
+        "eda": { "type": "number" },
+        "movement": { "type": "number" },
+        "temperature": { "type": "number" }
+      },
+      "required": []
+    },
+
+    "feeling": {
+      "type": "object",
+      "properties": {
+        "physical_sensation": { "type": "string" },
+        "temperature": { "type": "string" },
+        "energy_level": { "type": "string" }
+      },
+      "required": []
+    },
+
+    "emotion": {
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "intensity": { "type": "number" },
+        "volatility_index": { "type": "number" }
+      },
+      "required": []
+    },
+
+    "meaning": {
+      "type": "object",
+      "properties": {
+        "context": { "type": "string" },
+        "self_talk": { "type": "string" },
+        "complex_tag": { "type": "string" }
+      },
+      "required": []
+    },
+
+    "complex": {
+      "type": "object",
+      "properties": {
+        "weight": { "type": "number" },
+        "recurrence_count_7d": { "type": "integer" },
+        "average_duration_sec": { "type": "number" }
+      },
+      "required": []
+    },
+
+    "coherence": {
+      "type": "object",
+      "properties": {
+        "alignment_score": { "type": "number" },
+        "notes": { "type": "string" }
+      },
+      "required": []
+    }
+  },
+  "required": ["user_id", "timestamp"]
+}
