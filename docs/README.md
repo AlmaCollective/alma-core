@@ -73,3 +73,63 @@ class InterpretationResult:
     details: str
     confidence: float
     dejavu: Optional[str] = None
+This is the layer that turns numbers into human-readable state.
+
+4. High-Level Pipeline (pipeline.py)
+
+To make integration easy, Alma Core exposes a single high-level API:
+from datetime import datetime, timedelta
+from alma_core.cadence_layer import RawSample
+from alma_core.pipeline import run_alma_core_pipeline, AlmaPipelineConfig
+
+# 1) Build some dummy samples (in real life these come from the device).
+now = datetime.utcnow()
+samples = [
+    RawSample(
+        timestamp=now + timedelta(seconds=i * 5),
+        hr_bpm=70 + (i % 5),
+        rr_ms=850.0,
+        accel_mg=100.0,
+        signal_quality=0.9,
+        battery_pct=80.0,
+    )
+    for i in range(0, 200)
+]
+
+# 2) Configure the pipeline (sane defaults if you don't pass anything).
+config = AlmaPipelineConfig(
+    cadence_seconds=120,
+    window_minutes=10,
+)
+
+# 3) Run the full core pipeline.
+results = run_alma_core_pipeline(samples, config=config)
+
+# 4) Inspect the high-level interpretation.
+for r in results:
+    print(r.timestamp.isoformat(), r.labels, r.details, "conf=", r.confidence)
+This is what higher layers (Alma Spiral, Alma Emotion AI, UI, etc.) will use.
+Folder Structure (high-level)
+alma-core/
+├─ alma_core/
+│  ├─ cadence_layer.py          # canonical 2-minute rhythm + alerts
+│  ├─ dejavu_layer.py           # pattern recurrence in time
+│  ├─ interpretation_layer.py   # human-readable state labels
+│  └─ pipeline.py               # end-to-end API
+├─ book-of-feel/                # narrative / conceptual backbone
+├─ docs/                        # technical + conceptual docs
+└─ README.md                    # this file
+Design Principles
+
+Stable APIs, replaceable internals
+Each layer can be re-implemented in another language (Rust, Go, TypeScript, etc.) as long as it respects the same data contracts.
+
+Separation of concerns
+Cadence ≠ Deja-Vu ≠ Interpretation.
+Rhythm → Pattern → Meaning.
+
+No heavy dependencies
+Pure Python + standard library in this reference implementation, so others can port it easily.
+
+Human-first
+The end product of this core is not just metrics, but readable state that can be connected to human experience and feedback.
