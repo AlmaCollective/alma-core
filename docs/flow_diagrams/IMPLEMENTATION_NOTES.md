@@ -270,3 +270,68 @@ Cadence Layer should run in parallel for each entity
 Interpretation Layer mostly sequential
 
 Use async event loops for System Layer
+Windowing functions
+
+Feature extraction modules
+
+Data structures
+
+Rust/C++ skeletons
+
+REST API scaffolding
+
+Basic dashboards
+
+CLI tools
+
+Kimi2 should not:
+
+change cadence definitions
+
+introduce ML early
+
+merge states
+
+rewrite architecture
+
+fuse layers
+
+Kimi2 must treat this document as canonical reference.
+
+8. What to Avoid (Critical)
+
+No emotional labels (“anxiety”, “depression”, “anger”).
+
+No medical inference.
+
+No moral judgments.
+
+No forced actions.
+
+No real-time biometric tracking without user consent.
+
+No combining human + factory data in the same entity.
+
+No “performance scoring.”
+
+Alma reflects rhythm — not value or morality.
+
+9. Summary
+
+This document ensures Alma is implemented correctly by any developer:
+
+deterministic core
+
+transparent logic
+
+clear data structures
+
+modular design
+
+safe for humans
+
+robust for industry
+
+compatible with any ecosystem
+
+It is the “technical constitution” of Alma.
