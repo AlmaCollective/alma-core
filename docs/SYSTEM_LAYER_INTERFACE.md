@@ -110,3 +110,64 @@ If unsupported:
 return ERROR_UNSUPPORTED_VERSION
 
 suggest fallback
+📌 8.8 Security Headers & Signatures (v0.1)
+### 8.8 Security Headers & Signatures (v0.1)
+
+Every API call to Alma's System Layer must include explicit security metadata.
+Without these headers, requests are rejected automatically.
+
+---
+
+#### **Required Headers**
+
+1. `X-Alma-Version`
+   - Specifies API version.
+   - Example: `X-Alma-Version: 1.0`
+
+2. `X-Alma-Client-ID`
+   - Unique identity of the caller (device, app, service).
+
+3. `X-Alma-Timestamp`
+   - ISO8601 timestamp when the request was generated.
+   - Reject if time drift > 30 seconds.
+
+4. `X-Alma-Signature`
+   - HMAC-SHA256 signature over:
+     - payload (if POST)
+     - timestamp
+     - client ID
+   - Generated using the client’s shared secret.
+
+---
+
+#### **Signature Verification Rules**
+
+- Payload + timestamp + client ID are concatenated in canonical format.
+- The server computes its own HMAC using the client’s secret.
+- If signatures differ → reject with `ERROR_SIGNATURE_INVALID`.
+- If timestamp too old → reject with `ERROR_TIMESTAMP_DRIFT`.
+- If client ID unknown → reject with `ERROR_UNKNOWN_CLIENT`.
+
+---
+
+#### **Replay Protection**
+
+The System Layer keeps a rolling window of used signatures.
+If a signature appears again → automatic block:
+- reject request,
+- log security alert,
+- increment client’s risk score.
+
+---
+
+#### **Why This Matters**
+
+Security headers ensure:
+- no spoofing,
+- no tampering,
+- no replay attacks,
+- no unauthorized access,
+- deterministic trust boundaries.
+
+This design protects Alma’s internal state while allowing integrations without exposing sensitive internals.
+
