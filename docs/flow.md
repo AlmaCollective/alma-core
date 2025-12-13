@@ -35,3 +35,6 @@ No obligation, no feedback loop enforcement
 Loop
 
 System continues sensing without escalating interpretation
+Primary Use Case
+
+Alma supports individuals experiencing cognitive or emotional overload by offering gentle cues that help them notice shifts in their internal rhythm, without pushing correction or optimization.
